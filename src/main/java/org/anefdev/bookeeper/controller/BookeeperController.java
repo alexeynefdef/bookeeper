@@ -21,6 +21,11 @@ public class BookeeperController {
         return service;
     }
 
+    @GetMapping
+    public String greeting() {
+        return "Welcome to Bookeeper API";
+    }
+
     @GetMapping("books/{id}")
     public Book findBookById(@PathVariable Long id) {
         return service.getBookById(id);
