@@ -6,13 +6,15 @@ import org.anefdev.bookeeper.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class BookeeperService {
+public class BookService {
 
     private final BookRepository repository;
 
     @Autowired
-    public BookeeperService(BookRepository repository) {
+    public BookService(BookRepository repository) {
         this.repository = repository;
     }
 
@@ -24,7 +26,11 @@ public class BookeeperService {
         return repository.getById(id);
     }
 
-    public void saveBook(BookDTO bookDto) {
+    public List<Book> getAll() {
+        return repository.findAll();
+    }
+
+    public String saveBook(BookDTO bookDto) {
         var newBook = Book.builder()
                 .title(bookDto.getTitle())
                 .author(bookDto.getAuthor())
@@ -33,5 +39,6 @@ public class BookeeperService {
                 .build();
 
         repository.save(newBook);
+        return "ADDED NEW BOOK";
     }
 }

@@ -2,7 +2,7 @@ package org.anefdev.bookeeper.controller;
 
 import org.anefdev.bookeeper.dto.BookDTO;
 import org.anefdev.bookeeper.model.Book;
-import org.anefdev.bookeeper.service.BookeeperService;
+import org.anefdev.bookeeper.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "bookeeper/api")
 public class BookeeperController {
 
-    private final BookeeperService service;
+    private final BookService service;
 
     @Autowired
-    public BookeeperController(BookeeperService service) {
+    public BookeeperController(BookService service) {
         this.service = service;
     }
 
-    public BookeeperService getService() {
+    public BookService getService() {
         return service;
     }
 
