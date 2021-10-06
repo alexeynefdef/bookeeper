@@ -32,7 +32,7 @@ public class UserService {
         return repository.findAll();
     }
 
-    public String addUser(UserDTO userDTO) {
+    public void saveUser(UserDTO userDTO) {
         User newUser = User.builder()
                 .fullname(userDTO.getFullname())
                 .username(userDTO.getUsername())
@@ -40,7 +40,7 @@ public class UserService {
                 .password(userDTO.getPassword())
                 .books(Collections.emptyList())
                 .build();
-        return "ADDED NEW USER";
+        repository.save(newUser);
     }
 
 }

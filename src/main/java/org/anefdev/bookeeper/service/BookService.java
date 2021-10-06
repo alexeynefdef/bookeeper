@@ -30,7 +30,7 @@ public class BookService {
         return repository.findAll();
     }
 
-    public String saveBook(BookDTO bookDto) {
+    public void saveBook(BookDTO bookDto) {
         var newBook = Book.builder()
                 .title(bookDto.getTitle())
                 .author(bookDto.getAuthor())
@@ -39,6 +39,5 @@ public class BookService {
                 .build();
 
         repository.save(newBook);
-        return "ADDED NEW BOOK";
     }
 }
