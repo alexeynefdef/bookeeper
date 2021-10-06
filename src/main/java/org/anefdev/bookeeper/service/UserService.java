@@ -1,7 +1,7 @@
 package org.anefdev.bookeeper.service;
 
 import org.anefdev.bookeeper.dto.UserDTO;
-import org.anefdev.bookeeper.model.Book;
+import org.anefdev.bookeeper.exception.UserAlreadyExistsException;
 import org.anefdev.bookeeper.model.User;
 import org.anefdev.bookeeper.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +32,23 @@ public class UserService {
         return repository.findAll();
     }
 
-    public void saveUser(UserDTO userDTO) {
-        User newUser = User.builder()
-                .fullname(userDTO.getFullname())
-                .username(userDTO.getUsername())
-                .email(userDTO.getEmail())
-                .password(userDTO.getPassword())
-                .books(Collections.emptyList())
-                .build();
-        repository.save(newUser);
+    public void saveUser(UserDTO userDTO) throws UserAlreadyExistsException {
+
+        if (repository.findUserByEmail(userDTO.getEmail()) == null) {
+
+            var newUser = User.builder()
+                    .fullname(userDTO.getFullname())
+                    .username(userDTO.getUsername())
+                    .email(userDTO.getEmail())
+                    .password(userDTO.getPassword())
+                    .books(Collections.emptyList())
+                    .build();
+
+            repository.save(newUser);
+
+        } else {
+            throw new UserAlreadyExistsException("USER WITH EMAIL: " + userDTO.getEmail() + " ALREADY EXISTS");
+        }
     }
 
 }

@@ -1,6 +1,8 @@
 package org.anefdev.bookeeper.service;
 
 import org.anefdev.bookeeper.dto.BookDTO;
+import org.anefdev.bookeeper.exception.BookAlreadyExistsException;
+import org.anefdev.bookeeper.exception.BookNotFoundException;
 import org.anefdev.bookeeper.model.Book;
 import org.anefdev.bookeeper.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +32,32 @@ public class BookService {
         return repository.findAll();
     }
 
-    public void saveBook(BookDTO bookDto) {
-        var newBook = Book.builder()
-                .title(bookDto.getTitle())
-                .author(bookDto.getAuthor())
-                .description(bookDto.getDescription())
-                .rate(bookDto.getRate())
-                .build();
+    public void saveBook(BookDTO bookDto) throws BookAlreadyExistsException {
 
-        repository.save(newBook);
+        if (repository.findByTitleContainingIgnoreCase(bookDto.getTitle()).isEmpty()) {
+
+            var newBook = Book.builder()
+                    .title(bookDto.getTitle())
+                    .author(bookDto.getAuthor())
+                    .description(bookDto.getDescription())
+                    .rate(bookDto.getRate())
+                    .build();
+
+            repository.save(newBook);
+
+        } else {
+            throw new BookAlreadyExistsException("BOOK WITH TITLE: " + bookDto.getTitle() + " ALREADY EXISTS");
+        }
+    }
+
+    public List<Book> findBooksByTitle(String title) throws BookNotFoundException {
+
+        var booksFound = repository.findByTitleContainingIgnoreCase(title);
+
+        if (!booksFound.isEmpty()) {
+            return booksFound;
+        } else {
+            throw new BookNotFoundException("BOOK WITH TITLE: " + title + " NOT FOUND");
+        }
     }
 }
