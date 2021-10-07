@@ -5,6 +5,7 @@ import org.anefdev.bookeeper.dto.UserDTO;
 import org.anefdev.bookeeper.exception.BookAlreadyExistsException;
 import org.anefdev.bookeeper.exception.BookNotFoundException;
 import org.anefdev.bookeeper.exception.UserAlreadyExistsException;
+import org.anefdev.bookeeper.exception.UserNotFoundException;
 import org.anefdev.bookeeper.model.Book;
 import org.anefdev.bookeeper.model.User;
 import org.anefdev.bookeeper.service.BookService;
@@ -44,13 +45,23 @@ public class BookeeperController {
     }
 
     @GetMapping("books/{id}")
-    public Book findBookById(@PathVariable Long id) {
-        return bookService.getBookById(id);
+    public ResponseEntity<Book> findBookById(@PathVariable long id) {
+        try {
+
+            return new ResponseEntity<>(bookService.getBookById(id),HttpStatus.OK);
+        } catch (BookNotFoundException e) {
+            System.out.println(id);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("users/{id}")
-    public User findUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public ResponseEntity<User> findUserById(@PathVariable long id) {
+        try {
+            return new ResponseEntity<>(userService.getUserById(id),HttpStatus.OK);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("books/all")

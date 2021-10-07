@@ -2,6 +2,7 @@ package org.anefdev.bookeeper.service;
 
 import org.anefdev.bookeeper.dto.UserDTO;
 import org.anefdev.bookeeper.exception.UserAlreadyExistsException;
+import org.anefdev.bookeeper.exception.UserNotFoundException;
 import org.anefdev.bookeeper.model.User;
 import org.anefdev.bookeeper.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -24,8 +26,9 @@ public class UserService {
         return repository;
     }
 
-    public User getUserById(Long id) {
-        return repository.getById(id);
+    public User getUserById(long id) throws UserNotFoundException {
+        Optional<User> user = repository.findById(id);
+        return user.orElseThrow(() -> new UserNotFoundException("USER WITH ID: " + id + " NOT FOUND"));
     }
 
     public List<User> getAll() {
