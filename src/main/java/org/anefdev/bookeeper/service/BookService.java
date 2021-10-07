@@ -62,4 +62,15 @@ public class BookService {
             throw new BookNotFoundException("BOOK WITH TITLE: " + title + " NOT FOUND");
         }
     }
+
+    public List<Book> findBooksByAuthor(String author) throws BookNotFoundException {
+
+        var booksFound = repository.findByTitleContainingIgnoreCase(author);
+
+        if (!booksFound.isEmpty()) {
+            return booksFound;
+        } else {
+            throw new BookNotFoundException("BOOKS BY: " + author + " ARE NOT FOUND");
+        }
+    }
 }

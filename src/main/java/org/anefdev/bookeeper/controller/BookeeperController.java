@@ -1,5 +1,6 @@
 package org.anefdev.bookeeper.controller;
 
+import lombok.Getter;
 import org.anefdev.bookeeper.dto.BookDTO;
 import org.anefdev.bookeeper.dto.UserDTO;
 import org.anefdev.bookeeper.exception.BookAlreadyExistsException;
@@ -16,9 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
+@Getter
 @RequestMapping(path = "bookeeper/api")
 public class BookeeperController {
 
@@ -29,14 +30,6 @@ public class BookeeperController {
     public BookeeperController(BookService service, UserService userService) {
         this.bookService = service;
         this.userService = userService;
-    }
-
-    public BookService getBookService() {
-        return bookService;
-    }
-
-    public UserService getUserService() {
-        return userService;
     }
 
     @GetMapping
@@ -107,6 +100,16 @@ public class BookeeperController {
 
         try {
             return new ResponseEntity<>(bookService.findBooksByTitle(title),HttpStatus.OK);
+        } catch (BookNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("books/find/{author}")
+    public ResponseEntity<List<Book>> getBooksByAuthor(@PathVariable String author) {
+
+        try {
+            return new ResponseEntity<>(bookService.findBooksByAuthor(author),HttpStatus.OK);
         } catch (BookNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

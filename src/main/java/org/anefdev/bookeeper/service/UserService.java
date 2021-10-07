@@ -6,6 +6,8 @@ import org.anefdev.bookeeper.exception.UserNotFoundException;
 import org.anefdev.bookeeper.model.User;
 import org.anefdev.bookeeper.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -16,10 +18,12 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository repository) {
         this.repository = repository;
+        this.passwordEncoder = new BCryptPasswordEncoder(11);
     }
 
     public UserRepository getRepository() {
@@ -43,7 +47,7 @@ public class UserService {
                     .fullname(userDTO.getFullname())
                     .username(userDTO.getUsername())
                     .email(userDTO.getEmail())
-                    .password(userDTO.getPassword())
+                    .password(passwordEncoder.encode(userDTO.getPassword()))
                     .books(Collections.emptyList())
                     .build();
 
