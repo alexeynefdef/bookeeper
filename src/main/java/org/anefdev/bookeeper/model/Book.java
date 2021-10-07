@@ -3,6 +3,7 @@ package org.anefdev.bookeeper.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -30,4 +31,13 @@ public class Book {
     private Long rate;
     @ManyToMany
     private List<User> users;
+
+    public Book(String title, String author, String description) {
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.rate = 0L;
+        this.users = Collections.emptyList();
+
+    }
 }
