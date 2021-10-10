@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anefdev.bookeeper.dto.BookDTO;
 import org.anefdev.bookeeper.exception.BookAlreadyExistsException;
-import org.anefdev.bookeeper.exception.BookNotFoundException;
 import org.anefdev.bookeeper.model.Book;
 import org.anefdev.bookeeper.service.BookService;
 import org.springframework.http.HttpHeaders;
@@ -22,16 +21,6 @@ public class BookController {
 
     private final BookService bookService;
 
-/*    @GetMapping("{id}")
-    public ResponseEntity<Book> findBookById(@PathVariable long id) {
-        try {
-            return new ResponseEntity<>(bookService.getBookById(id), HttpStatus.OK);
-        } catch (BookNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }*/
-
-
     @GetMapping("all")
     public ResponseEntity<List<Book>> findAllBooks() {
         var headers = new HttpHeaders();
@@ -39,7 +28,6 @@ public class BookController {
         headers.set("Access-Control-Allow-Origin","*");
         return ResponseEntity.ok().headers(headers).body(bookService.getAll());
     }
-
 
     @PostMapping("add")
     public ResponseEntity<String> addBook(@RequestBody BookDTO book) {
@@ -51,7 +39,6 @@ public class BookController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
-
 
     @GetMapping("find/{title}")
     public ResponseEntity<List<Book>> getBooksByTitle(@PathVariable String title) {

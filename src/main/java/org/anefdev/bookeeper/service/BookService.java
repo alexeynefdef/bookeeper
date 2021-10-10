@@ -19,11 +19,6 @@ public class BookService {
 
     private final BookRepository repository;
 
-    public Book getBookById(long id) throws BookNotFoundException {
-        Optional<Book> book = repository.findById(id);
-        return book.orElseThrow(() -> new BookNotFoundException("BOOK WITH ID: " + id + " NOT FOUND"));
-    }
-
     public List<Book> getAll() {
         return repository.findAll();
     }

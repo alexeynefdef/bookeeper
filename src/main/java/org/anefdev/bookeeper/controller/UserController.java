@@ -25,15 +25,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<User> findUserById(@PathVariable long id) {
-        try {
-            return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
     @GetMapping("all")
     public List<User> findAllUsers() {
         return userService.getAll();
