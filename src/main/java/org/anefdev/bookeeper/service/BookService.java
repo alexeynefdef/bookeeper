@@ -1,5 +1,6 @@
 package org.anefdev.bookeeper.service;
 
+import lombok.RequiredArgsConstructor;
 import org.anefdev.bookeeper.dto.BookDTO;
 import org.anefdev.bookeeper.exception.BookAlreadyExistsException;
 import org.anefdev.bookeeper.exception.BookNotFoundException;
@@ -12,19 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
 
     private final BookRepository repository;
-
-    @Autowired
-    public BookService(BookRepository repository) {
-        this.repository = repository;
-    }
-
-    public BookRepository getRepository() {
-        return repository;
-    }
 
     public Book getBookById(long id) throws BookNotFoundException {
         Optional<Book> book = repository.findById(id);
@@ -37,7 +30,7 @@ public class BookService {
 
     public void saveBook(BookDTO bookDto) throws BookAlreadyExistsException {
 
-        if (repository.findByTitleContainingIgnoreCase(bookDto.getTitle()).isEmpty()) {
+        if (repository.findBooksByTitleContaining(bookDto.getTitle()).isEmpty()) {
 
             var newBook = Book.builder()
                     .title(bookDto.getTitle())
@@ -53,25 +46,15 @@ public class BookService {
         }
     }
 
-    public List<Book> findBooksByTitle(String title) throws BookNotFoundException {
+    public List<Book> findBooksByTitle(String title) {
 
-        var booksFound = repository.findByTitleContainingIgnoreCase(title);
+        return repository.findBooksByTitleContaining(title);
 
-        if (!booksFound.isEmpty()) {
-            return booksFound;
-        } else {
-            throw new BookNotFoundException("BOOK WITH TITLE: " + title + " NOT FOUND");
-        }
     }
 
-    public List<Book> findBooksByAuthor(String author) throws BookNotFoundException {
+    public List<Book> findBooksByAuthor(String author) {
 
-        var booksFound = repository.findByTitleContainingIgnoreCase(author);
+        return repository.findBooksByTitleContaining(author);
 
-        if (!booksFound.isEmpty()) {
-            return booksFound;
-        } else {
-            throw new BookNotFoundException("BOOKS BY: " + author + " ARE NOT FOUND");
-        }
     }
 }

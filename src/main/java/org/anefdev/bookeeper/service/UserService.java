@@ -1,5 +1,6 @@
 package org.anefdev.bookeeper.service;
 
+import lombok.RequiredArgsConstructor;
 import org.anefdev.bookeeper.dto.UserDTO;
 import org.anefdev.bookeeper.exception.UserAlreadyExistsException;
 import org.anefdev.bookeeper.exception.UserNotFoundException;
@@ -15,20 +16,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository repository;
-    private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public UserService(UserRepository repository) {
-        this.repository = repository;
-        this.passwordEncoder = new BCryptPasswordEncoder(11);
-    }
-
-    public UserRepository getRepository() {
-        return repository;
-    }
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);
 
     public User getUserById(long id) throws UserNotFoundException {
         Optional<User> user = repository.findById(id);
@@ -48,7 +40,6 @@ public class UserService {
                     .username(userDTO.getUsername())
                     .email(userDTO.getEmail())
                     .password(passwordEncoder.encode(userDTO.getPassword()))
-                    .books(Collections.emptyList())
                     .build();
 
             repository.save(newUser);

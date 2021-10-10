@@ -1,12 +1,12 @@
 package org.anefdev.bookeeper.service;
 
-import org.anefdev.bookeeper.exception.BookNotFoundException;
 import org.anefdev.bookeeper.model.Book;
 import org.anefdev.bookeeper.repository.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -20,73 +20,34 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Testing the BookService integration")
 class BookServiceTest {
 
+    @InjectMocks
     private BookService service;
     @Mock
     private BookRepository repository;
-
-    @BeforeEach
-    void init() {
-        service = new BookService(repository);
-    }
-
-    @Test
-    void getBookByIdExists() {
-        var expectedEntity = new Book(
-                "1984",
-                "George Orwell",
-                "Dystopia"
-        );
-
-        Mockito.when(repository.getById(1L)).thenReturn(expectedEntity);
-
-        try {
-            var book = service.getBookById(1L);
-            assertEquals(expectedEntity,book);
-        } catch (BookNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    void getBookByIdNotExists() {
-        var expectedEntity = new Book(
-                "1984",
-                "George Orwell",
-                "Dystopia"
-        );
-
-        Mockito.when(repository.getById(1L)).thenReturn(expectedEntity);
-
-        assertThrows(BookNotFoundException.class,() -> service.getBookById(2L));
-    }
-
 
     @Test
     void getAllExistingBooks() {
         final var expectedBooks = List.of(
                 new Book(
-                        (long)1,
+                        1L,
                         "Chapaev and void",
                         "Viktor Pelevin",
                         "Modern novel",
-                        (long)5,
-                        Collections.emptyList()
+                        5L
                 ),
                 new Book(
-                        (long)2,
+                        2L,
                         "1984",
                         "George Orwell",
                         "Distopy",
-                        (long)5,
-                        Collections.emptyList()
+                        5L
                 ),
                 new Book(
-                        (long)3,
+                        3L,
                         "Infinite Jest",
                         "David Foster Wallace",
                         "Modern novel",
-                        (long)5,
-                        Collections.emptyList()
+                        5L
                 )
 
         );
