@@ -2,15 +2,16 @@ package org.anefdev.bookeeper.service;
 
 import lombok.RequiredArgsConstructor;
 import org.anefdev.bookeeper.dto.BookDTO;
+import org.anefdev.bookeeper.dto.BookDtoConverter;
 import org.anefdev.bookeeper.exception.BookAlreadyExistsException;
-import org.anefdev.bookeeper.exception.BookNotFoundException;
 import org.anefdev.bookeeper.model.Book;
 import org.anefdev.bookeeper.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +20,10 @@ public class BookService {
 
     private final BookRepository repository;
 
-    public List<Book> getAll() {
-        return repository.findAll();
+    public List<BookDTO> getAll() {
+
+        return BookDtoConverter.convertEntitiesToDTO(repository.findAll());
+
     }
 
     public void saveBook(BookDTO bookDto) throws BookAlreadyExistsException {
@@ -31,7 +34,6 @@ public class BookService {
                     .title(bookDto.getTitle())
                     .author(bookDto.getAuthor())
                     .description(bookDto.getDescription())
-                    .rate(bookDto.getRate())
                     .build();
 
             repository.save(newBook);
@@ -41,15 +43,16 @@ public class BookService {
         }
     }
 
-    public List<Book> findBooksByTitle(String title) {
+    public List<BookDTO> findBooksByTitle(String title) {
 
-        return repository.findBooksByTitleContaining(title);
+        return BookDtoConverter.convertEntitiesToDTO(repository.findBooksByTitleContaining(title));
+
+    }
+
+    public List<BookDTO> findBooksByAuthor(String author) {
+
+        return BookDtoConverter.convertEntitiesToDTO(repository.findBooksByAuthorContaining(author));
 
     }
 
-    public List<Book> findBooksByAuthor(String author) {
-
-        return repository.findBooksByTitleContaining(author);
-
-    }
 }

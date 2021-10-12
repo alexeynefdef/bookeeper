@@ -2,7 +2,6 @@ package org.anefdev.bookeeper.service;
 
 import org.anefdev.bookeeper.model.Book;
 import org.anefdev.bookeeper.repository.BookRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,22 +31,19 @@ class BookServiceTest {
                         1L,
                         "Chapaev and void",
                         "Viktor Pelevin",
-                        "Modern novel",
-                        5L
+                        "Modern novel"
                 ),
                 new Book(
                         2L,
                         "1984",
                         "George Orwell",
-                        "Distopy",
-                        5L
+                        "Distopy"
                 ),
                 new Book(
                         3L,
                         "Infinite Jest",
                         "David Foster Wallace",
-                        "Modern novel",
-                        5L
+                        "Modern novel"
                 )
 
         );
