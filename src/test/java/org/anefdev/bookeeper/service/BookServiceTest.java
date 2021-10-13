@@ -1,5 +1,7 @@
 package org.anefdev.bookeeper.service;
 
+import org.anefdev.bookeeper.dto.BookDTO;
+import org.anefdev.bookeeper.dto.BookDtoConverter;
 import org.anefdev.bookeeper.model.Book;
 import org.anefdev.bookeeper.repository.BookRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -45,14 +47,14 @@ class BookServiceTest {
                         "David Foster Wallace",
                         "Modern novel"
                 )
-
         );
 
         Mockito.when(repository.findAll()).thenReturn(expectedBooks);
 
-        final List<Book> booksFound = repository.findAll();
+        final List<BookDTO> booksFound = service.getAll();
 
-        assertEquals(expectedBooks,booksFound);
+
+        assertEquals(BookDtoConverter.convertListOfBooksToDTO(expectedBooks),booksFound);
     }
 
     @Test

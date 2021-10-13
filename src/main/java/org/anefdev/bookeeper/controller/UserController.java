@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping("all")
-    public List<User> findAllUsers() {
+    public List<UserDTO> findAllUsers() {
         return userService.getAll();
     }
 
@@ -37,7 +37,10 @@ public class UserController {
             userService.saveUser(user);
 
             return new ResponseEntity<>(
-                    "ADDED NEW USER: " + user.getUsername(),
+                    "ADDED NEW USER: " +
+                            user.getFullname() + "\n" +
+                            user.getUsername() + "\n" +
+                            user.getEmail(),
                     HttpStatus.CREATED
             );
         } catch (UserAlreadyExistsException e) {

@@ -8,11 +8,12 @@ import java.util.stream.Collectors;
 
 public class BookDtoConverter {
 
-    public static List<BookDTO> convertEntitiesToDTO(List<Book> bookEntities) {
 
-        if (!bookEntities.isEmpty()) {
+    public static List<BookDTO> convertListOfBooksToDTO(List<Book> books) {
 
-            return bookEntities.stream().map(book -> BookDTO.builder()
+        if (!books.isEmpty()) {
+
+            return books.stream().map(book -> BookDTO.builder()
                     .title(book.getTitle())
                     .author(book.getAuthor())
                     .description(book.getDescription())
@@ -22,5 +23,25 @@ public class BookDtoConverter {
         } else return Collections.emptyList();
 
     }
+
+    public static Book convertBookDTOtoBookEntity(BookDTO bookDTO) {
+
+        return Book.builder()
+                .title(bookDTO.getTitle())
+                .author(bookDTO.getAuthor())
+                .description(bookDTO.getDescription())
+                .build();
+
+    }
+
+    /*public static BookDTO convertBookToDTO(Book book) {
+
+        return BookDTO.builder()
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .description(book.getDescription())
+                .build();
+
+    }*/
 
 }
