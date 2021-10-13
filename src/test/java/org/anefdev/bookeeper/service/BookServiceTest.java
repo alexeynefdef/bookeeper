@@ -2,6 +2,7 @@ package org.anefdev.bookeeper.service;
 
 import org.anefdev.bookeeper.dto.BookDTO;
 import org.anefdev.bookeeper.dto.BookDtoConverter;
+import org.anefdev.bookeeper.exception.BookAlreadyExistsException;
 import org.anefdev.bookeeper.model.Book;
 import org.anefdev.bookeeper.repository.BookRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +29,7 @@ class BookServiceTest {
 
     @Test
     void getAllExistingBooks() {
+
         final var expectedBooks = List.of(
                 new Book(
                         1L,
@@ -53,21 +55,57 @@ class BookServiceTest {
 
         final List<BookDTO> booksFound = service.getAll();
 
-
         assertEquals(BookDtoConverter.convertListOfBooksToDTO(expectedBooks),booksFound);
+
     }
 
     @Test
     void getAllEmptyList() {
+
         Mockito.when(repository.findAll()).thenReturn(Collections.emptyList());
 
         var booksFound = service.getAll();
 
         assertTrue(booksFound.isEmpty());
+
     }
 
     @Test
-    void saveBook() {
+    void saveBook() throws BookAlreadyExistsException {
+
+        final var expectedBookDto = new BookDTO(
+                "Chapaev and void",
+                "Viktor Pelevin",
+                "Modern novel"
+        );
+
+        final var expectedBook = BookDtoConverter.convertBookDTOtoBookEntity(expectedBookDto);
+
+        Mockito.when(repository.findBooksByTitleContaining("Chapaev and void")).thenReturn(Collections.emptyList());
+
+        service.saveBook(expectedBookDto);
+
+        Mockito.when(repository.findBooksByTitleContaining("Chapaev and void")).thenReturn(List.of(expectedBook));
+
+        assertEquals(BookDtoConverter.convertListOfBooksToDTO(List.of(expectedBook)),service.findBooksByTitle("Chapaev and void"));
+
+    }
+
+    @Test
+    void saveBookAlreadyExists() {
+
+        final var expectedBookDto = new BookDTO(
+                "Chapaev and void",
+                "Viktor Pelevin",
+                "Modern novel"
+        );
+
+        final var expectedBook = BookDtoConverter.convertBookDTOtoBookEntity(expectedBookDto);
+
+        Mockito.when(repository.findBooksByTitleContaining("Chapaev and void")).thenReturn(List.of(expectedBook));
+
+        assertThrows(BookAlreadyExistsException.class,() -> service.saveBook(expectedBookDto));
+
     }
 
     @Test
