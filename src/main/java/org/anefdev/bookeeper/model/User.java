@@ -3,7 +3,7 @@ package org.anefdev.bookeeper.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,7 +29,7 @@ public class User {
     private String password;
     private String email;
     @OneToMany
-    private List<Book> books;
+    private Set<Book> books;
 
 }
 

@@ -3,7 +3,6 @@ package org.anefdev.bookeeper.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
@@ -27,7 +26,4 @@ public class Book {
     private String title;
     private String author;
     private String description;
-    private Long rate;
-    @ManyToMany
-    private List<User> users;
 }
